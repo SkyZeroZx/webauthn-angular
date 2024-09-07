@@ -1,0 +1,33 @@
+{
+	"name": "webauthn-nestjs",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"sourceRoot": "apps/webauthn-nestjs/src",
+	"projectType": "application",
+	"tags": [],
+	"targets": {
+		"serve": {
+			"executor": "@nx/js:node",
+			"defaultConfiguration": "development",
+			"dependsOn": ["build"],
+			"options": {
+				"buildTarget": "webauthn-nestjs:build",
+				"runBuildTargetDependencies": false
+			},
+			"configurations": {
+				"development": {
+					"buildTarget": "webauthn-nestjs:build:development"
+				},
+				"production": {
+					"buildTarget": "webauthn-nestjs:build:production"
+				}
+			}
+		},
+		"test": {
+			"executor": "@nx/jest:jest",
+			"outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+			"options": {
+				"jestConfig": "apps/webauthn-nestjs/jest.config.ts"
+			}
+		}
+	}
+}
