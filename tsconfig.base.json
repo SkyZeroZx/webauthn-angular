@@ -14,7 +14,9 @@
 		"skipLibCheck": true,
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
-		"paths": {}
+		"paths": {
+			"@skyzerozx/shared-interfaces": ["libs/shared-interfaces/src/index.ts"]
+		}
 	},
 	"exclude": ["node_modules", "tmp"]
 }
