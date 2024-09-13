@@ -5,6 +5,13 @@ dist
 tmp
 /out-tsc
 
+#env
+.env
+
+#logger
+LOG
+
+
 # dependencies
 node_modules
 
