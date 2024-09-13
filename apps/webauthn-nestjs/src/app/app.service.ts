@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-	getData(): { message: string } {
-		return { message: 'Hello 2132sdasdAPI' };
+	getData() {
+		return { message: 'Angular WebAuthn 01.00' };
 	}
 }
