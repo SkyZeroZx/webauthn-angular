@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - webauthn-network
+
+  redis:
+    image: bitnami/redis:7.2.5
+    container_name: redis-webauthn
+    restart: unless-stopped
+    environment:
+      - REDIS_PASSWORD=root
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      - webauthn-network
+
+networks:
+  webauthn-network:
+    driver: bridge
+
+volumes:
+  mysql-volume:
