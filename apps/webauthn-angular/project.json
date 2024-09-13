@@ -8,12 +8,16 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/webauthn-angular",
         "index": "apps/webauthn-angular/src/index.html",
         "browser": "apps/webauthn-angular/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/webauthn-angular/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -22,7 +26,9 @@
             "input": "apps/webauthn-angular/public"
           }
         ],
-        "styles": ["apps/webauthn-angular/src/styles.scss"],
+        "styles": [
+          "apps/webauthn-angular/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -44,7 +50,13 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/webauthn-angular/src/environments/environment.ts",
+              "with": "apps/webauthn-angular/src/environments/environment.development.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"
@@ -72,7 +84,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/webauthn-angular/jest.config.ts"
       }
