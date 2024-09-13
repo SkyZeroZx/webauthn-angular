@@ -11,6 +11,12 @@
 		}
 	],
 	"compilerOptions": {
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"baseUrl": ".",
+		"paths": {
+			"@core/*": ["src/app/core/*"],
+			"@/*": ["src/app/modules/*"],
+			"@skyzerozx/shared-interfaces": ["../../libs/shared-interfaces/src/index.ts"]
+		}
 	}
 }
