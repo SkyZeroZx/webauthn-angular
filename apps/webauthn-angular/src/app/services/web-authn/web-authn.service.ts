@@ -4,8 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser';
 import {
-    AuthenticationResponseJSON, PublicKeyCredentialCreationOptionsJSON,
-    PublicKeyCredentialRequestOptionsJSON, RegistrationResponseJSON
+	AuthenticationResponseJSON,
+	PublicKeyCredentialCreationOptionsJSON,
+	PublicKeyCredentialRequestOptionsJSON,
+	RegistrationResponseJSON
 } from '@simplewebauthn/types';
 import { ResponseFormat } from '@skyzerozx/shared-interfaces';
 
@@ -38,8 +40,8 @@ export class WebAuthnService {
 
 	register() {
 		return this.generateRegistrationOptions().pipe(
-			switchMap(this.startRegistration),
-			switchMap(this.verifyRegistration)
+			switchMap((options) => this.startRegistration(options)),
+			switchMap((res) => this.verifyRegistration(res))
 		);
 	}
 
@@ -56,13 +58,16 @@ export class WebAuthnService {
 	}
 
 	private verifyAuthentication(response: AuthenticationResponseJSON) {
-		return this.http.post<ResponseFormat>(`${environment.API_URL}/auth/verify-authentication`, response);
+		return this.http.post<ResponseFormat>(
+			`${environment.API_URL}/auth/verify-authentication`,
+			response
+		);
 	}
 
 	login() {
 		return this.generateAuthenticationOptions().pipe(
-			switchMap(this.startAuthentication),
-			switchMap(this.verifyAuthentication)
+			switchMap((options) => this.startAuthentication(options)),
+			switchMap((res) => this.verifyAuthentication(res))
 		);
 	}
 }
