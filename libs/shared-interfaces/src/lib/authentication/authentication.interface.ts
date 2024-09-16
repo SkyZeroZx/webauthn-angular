@@ -9,7 +9,7 @@ export interface Authentication {
 	/* String Encode to base64url */
 	credentialID: string;
 
-	credentialPublicKey: Buffer;
+	credentialPublicKey: Uint8Array;
 
  	counter: number;
 }
