@@ -1,13 +1,1 @@
 <router-outlet />
-
-<button (click)="registerWebAuthn()">Register</button>
-<button (click)="loginWebAuthn()">LogIn</button>
-
-<form [formGroup]="registerForm" style="display: flex; flex-direction: column; gap : 1rem">
-	<input formControlName="username" type="text" placeholder="username" />
-	<input formControlName="name" type="text" placeholder="nombre" />
-	<input formControlName="lastName" type="text" placeholder="apellidos" />
-	<input formControlName="password" type="password" placeholder="password" />
-</form>
-
-<button (click)="register()">OnRegister</button>

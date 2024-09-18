@@ -1,7 +1,7 @@
 import { concatMap, tap } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
 	RegisterUser,
 	ResponseFormat,
@@ -16,6 +16,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
 	private readonly http = inject(HttpClient);
+	private readonly userStorage = signal<UserProfile>(null);
 
 	register(registerUser: RegisterUser) {
 		return this.http
@@ -28,11 +29,16 @@ export class AuthService {
 			.post<
 				ResponseFormat<UserAuthenticated>
 			>(`${environment.API_URL}/auth/login`, { username, password })
-			.pipe(tap(({ data }) => this.saveToken(data.token)));
+			.pipe(tap(({ data }) => this.saveUserStorage(data)));
 	}
 
-	private saveToken(token: string) {
+	private saveUserStorage({ token, user }: UserAuthenticated) {
 		localStorage.setItem('token', token);
+		this.userStorage.set(user);
+	}
+
+	get user() {
+		return this.userStorage.asReadonly();
 	}
 
 	getTokenStore() {

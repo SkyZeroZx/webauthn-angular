@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
+	selector: 'app-content-layout',
 	standalone: true,
 	imports: [RouterModule],
-	selector: 'app-root',
-	templateUrl: './app.component.html',
-	styleUrl: './app.component.scss',
+	templateUrl: './content-layout.component.html',
+	styleUrl: './content-layout.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {}
+export class ContentLayoutComponent {}
