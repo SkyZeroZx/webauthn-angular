@@ -9,7 +9,7 @@ import { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simpleweb
 import { ChallengeService } from './challenge.service';
 import { AuthenticationEntity } from './entities/authentication.entity';
 import { WebAuthnService } from './web-authn.service';
-import { User } from '@skyzerozx/shared-interfaces';
+import { User, UserAuthenticated } from '@skyzerozx/shared-interfaces';
 
 @Injectable()
 export class AuthService {
@@ -68,9 +68,9 @@ export class AuthService {
 		});
 	}
 
-	generateToken(user: User) {
+	generateToken(user: User): UserAuthenticated {
 		const token = this.jwtService.sign({ user });
-		return { token };
+		return { token, user };
 	}
 
 	findAuthenticatorsByUsername(username: string) {
