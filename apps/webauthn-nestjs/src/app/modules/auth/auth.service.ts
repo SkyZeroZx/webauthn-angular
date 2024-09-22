@@ -69,7 +69,7 @@ export class AuthService {
 	}
 
 	generateToken(user: User): UserAuthenticated {
-		const token = this.jwtService.sign({ user });
+		const token = this.jwtService.sign({ ...user });
 		return { token, user };
 	}
 
@@ -95,8 +95,8 @@ export class AuthService {
 
 	async verifyAuthentication(user: User, data: AuthenticationResponseJSON) {
 		const [authenticator, challenge] = await Promise.all([
-			this.findAuthenticatorById(data.id, user.username),
-			this.challengeService.findByUsername(user.username)
+			this.findAuthenticatorById(data.id, 'jburgo33433st@unac.edu.pe'),
+			this.challengeService.findByUsername('jburgo33433st@unac.edu.pe')
 		]);
 
 		const { verified, authenticationInfo } =
@@ -109,8 +109,8 @@ export class AuthService {
 			});
 			throw new UnauthorizedException('Authentication failed');
 		}
-
-		return this.generateToken(user);
+		const userAuthenticated = this.generateToken(user);
+		return { ...userAuthenticated, authenticationInfo, verified };
 	}
 
 	async findAuthenticatorById(id: string, username: string) {
