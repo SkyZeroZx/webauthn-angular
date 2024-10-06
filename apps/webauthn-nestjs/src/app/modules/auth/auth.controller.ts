@@ -1,3 +1,5 @@
+ 
+import { UserAgent } from '@core/decorators';
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/types';
 import { User } from '@skyzerozx/shared-interfaces';
@@ -17,8 +19,12 @@ export class AuthController {
 
 	@Auth()
 	@Post('verify-registration')
-	verifyRegistration(@Body() verify: RegistrationResponseJSON, @GetUserContext() user: User) {
-		return this.authService.verifyRegistration(verify, user);
+	verifyRegistration(
+		@Body() verify: RegistrationResponseJSON,
+		@GetUserContext() user: User,
+		@UserAgent() device: string
+	) {
+		return this.authService.verifyRegistration(verify, user, device);
 	}
 
 	@Auth()
@@ -36,5 +42,11 @@ export class AuthController {
 	@Post('login')
 	login(@GetUserContext() user: User) {
 		return this.authService.generateToken(user);
+	}
+
+	@Auth()
+	@Get('authenticators')
+	getAuthenticators(@GetUserContext() user: User) {
+		return this.authService.findAuthenticatorsByUsername(user.username);
 	}
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
 
 import { Authentication } from '@skyzerozx/shared-interfaces';
 
@@ -8,8 +8,7 @@ import { UserEntity } from '../../user/entities/user.entity';
 @Unique(['credentialID'])
 export class AuthenticationEntity implements Authentication {
 	@PrimaryColumn()
-	// String in base64 encoding
-	id: string;
+	id: string; // String in base64 encoding
 
 	@ManyToOne(() => UserEntity, (user) => user.authentications, {
 		onDelete: 'CASCADE'
@@ -17,14 +16,23 @@ export class AuthenticationEntity implements Authentication {
 	user: UserEntity;
 
 	@Column({ type: 'varchar', nullable: false })
-	// SQL: Encode to base64url then store as `TEXT`. Index this column
-	credentialID: string;
+	device: string;
+
+	@Column({ type: 'varchar', nullable: true })
+	aaguid: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	credentialDeviceType: string;
+
+	@CreateDateColumn()
+	createAt: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	credentialID: string; // SQL: Encode to base64url then store as `TEXT`. Index this column
 
 	@Column({ type: 'bytea', nullable: false })
-	// SQL: Store raw bytes as `BYTEA`/`BLOB`/etc...
-	credentialPublicKey: Buffer;
+	credentialPublicKey: Buffer; // SQL: Store raw bytes as `BYTEA`/`BLOB`/etc...
 
 	@Column({ type: 'bigint', nullable: false })
-	// SQL: Consider `BIGINT` since some authenticators return atomic timestamps as counters
-	counter: number;
+	counter: number; // SQL: Consider `BIGINT` since some authenticators return atomic timestamps as counters
 }
