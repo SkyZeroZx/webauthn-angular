@@ -5,11 +5,11 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { VerifiedRegistrationResponse } from '@simplewebauthn/server';
 import { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/types';
+import { User, UserAuthenticated } from '@skyzerozx/shared-interfaces';
 
 import { ChallengeService } from './challenge.service';
 import { AuthenticationEntity } from './entities/authentication.entity';
 import { WebAuthnService } from './web-authn.service';
-import { User, UserAuthenticated } from '@skyzerozx/shared-interfaces';
 
 @Injectable()
 export class AuthService {
@@ -37,8 +37,8 @@ export class AuthService {
 		return register;
 	}
 
-	async verifyRegistration(verify: RegistrationResponseJSON, user: User) {
-		this.logger.log({ message: 'verify registration', data: { user, verify } });
+	async verifyRegistration(verify: RegistrationResponseJSON, user: User, device: string) {
+		this.logger.log({ message: 'verify registration', data: { user, verify, device } });
 
 		const challenge = await this.challengeService.findByUsername(user.username);
 
@@ -47,24 +47,30 @@ export class AuthService {
 			verify
 		);
 
+		this.logger.log({ message: 'Register Authentication options', data: { verifyAuthentication } });
+
 		if (!verifyAuthentication.verified) {
 			throw new BadRequestException('Registration verification failed');
 		}
 
-		await this.saveAuthenticator(user, verify.id, verifyAuthentication);
+		await this.saveAuthenticator(user, verify.id, verifyAuthentication, device);
 	}
 
 	saveAuthenticator(
 		user: User,
 		authenticatorId: string,
-		{ registrationInfo }: VerifiedRegistrationResponse
+		{ registrationInfo }: VerifiedRegistrationResponse,
+		device: string
 	) {
 		return this.authenticationRepository.save({
 			id: authenticatorId,
+			device,
 			counter: registrationInfo.counter,
 			user: user,
 			credentialID: registrationInfo.credentialID,
-			credentialPublicKey: Buffer.from(registrationInfo.credentialPublicKey)
+			credentialPublicKey: Buffer.from(registrationInfo.credentialPublicKey),
+			credentialDeviceType: registrationInfo.credentialDeviceType,
+			aaguid: registrationInfo.aaguid
 		});
 	}
 
@@ -87,7 +93,6 @@ export class AuthService {
 		const credentials = await this.findAuthenticatorsByUsername(username);
 
 		const options = await this.webAuthnService.generateAuthenticationOptions(credentials);
-
 		await this.challengeService.save(username, options.challenge);
 
 		return options;
