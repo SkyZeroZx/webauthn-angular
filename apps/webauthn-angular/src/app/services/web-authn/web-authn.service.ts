@@ -1,4 +1,4 @@
-import { from, map, switchMap } from 'rxjs';
+import { from, map, switchMap, tap } from 'rxjs';
 
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
@@ -9,15 +9,17 @@ import {
 	PublicKeyCredentialRequestOptionsJSON,
 	RegistrationResponseJSON
 } from '@simplewebauthn/types';
-import { ResponseFormat } from '@skyzerozx/shared-interfaces';
+import { Authentication, ResponseFormat, UserAuthenticated } from '@skyzerozx/shared-interfaces';
 
 import { environment } from '../../../environments/environment';
+import { AuthService } from '../auth';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class WebAuthnService {
 	private readonly http = inject(HttpClient);
+	private readonly authService = inject(AuthService);
 
 	private generateRegistrationOptions() {
 		return this.http
@@ -58,16 +60,24 @@ export class WebAuthnService {
 	}
 
 	private verifyAuthentication(response: AuthenticationResponseJSON) {
-		return this.http.post<ResponseFormat>(
+		return this.http.post<ResponseFormat<UserAuthenticated>>(
 			`${environment.API_URL}/auth/verify-authentication`,
 			response
 		);
 	}
 
 	login() {
-		return this.generateAuthenticationOptions().pipe(
-			switchMap((options) => this.startAuthentication(options)),
-			switchMap((res) => this.verifyAuthentication(res))
-		);
+		return this.generateAuthenticationOptions()
+			.pipe(
+				switchMap((options) => this.startAuthentication(options)),
+				switchMap((res) => this.verifyAuthentication(res))
+			)
+			.pipe(tap(({ data }) => this.authService.saveUserStorage(data)));
+	}
+
+	getAuthenticators() {
+		return this.http
+			.get<ResponseFormat<Authentication[]>>(`${environment.API_URL}/auth/authenticators`)
+			.pipe(map(({ data }) => data));
 	}
 }

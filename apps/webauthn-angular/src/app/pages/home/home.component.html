@@ -1,0 +1,9 @@
+<app-auth-options />
+
+<main class="main-authenticators">
+	@for (authenticator of authenticators(); track authenticator.id) {
+		<app-authenticator [authenticator]="authenticator" />
+	} @empty {
+		<p>No authenticators available</p>
+	}
+</main>

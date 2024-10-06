@@ -1,0 +1,32 @@
+<mat-card appearance="outlined" style="width: 400px; height: 400px; margin: 20px">
+	@let item = authenticator();
+	<mat-card-header>
+		<div style="display: flex; justify-content: space-between; width: 100%">
+			<p style="width: 70%">{{ item.device }}</p>
+			<button mat-icon-button>
+				<mat-icon fontIcon="delete_forever" class="icon-lg" />
+			</button>
+		</div>
+	</mat-card-header>
+	<mat-divider />
+	<mat-card-content style="overflow-y: auto">
+		<div style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem">
+			<dt>Credential Type</dt>
+			<dd>{{ item.credentialDeviceType }}</dd>
+
+			<dt>AAGUID</dt>
+			<dd>{{ item.aaguid }}</dd>
+
+			<dt>Enrolled at</dt>
+			<dd>{{ item.createAt }}</dd>
+
+			<dt>CredentialID</dt>
+			<dd>{{ item.credentialID }}</dd>
+
+			<dt>Public Key</dt>
+			<dd style="text-overflow: ellipsis">
+				{{ item.credentialPublicKey  | bufferToBase64}}
+			</dd>
+		</div>
+	</mat-card-content>
+</mat-card>

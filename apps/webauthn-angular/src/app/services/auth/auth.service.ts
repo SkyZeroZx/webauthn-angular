@@ -1,8 +1,9 @@
 import { concatMap, tap } from 'rxjs';
-
+import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import {
+	DecodeToken,
 	RegisterUser,
 	ResponseFormat,
 	UserAuthenticated,
@@ -16,7 +17,7 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
 	private readonly http = inject(HttpClient);
-	private readonly userStorage = signal<UserProfile>(null);
+	private readonly userStorage = signal<UserProfile>(this.decodeToken());
 
 	register(registerUser: RegisterUser) {
 		return this.http
@@ -32,7 +33,7 @@ export class AuthService {
 			.pipe(tap(({ data }) => this.saveUserStorage(data)));
 	}
 
-	private saveUserStorage({ token, user }: UserAuthenticated) {
+	saveUserStorage({ token, user }: UserAuthenticated) {
 		localStorage.setItem('token', token);
 		this.userStorage.set(user);
 	}
@@ -43,5 +44,14 @@ export class AuthService {
 
 	getTokenStore() {
 		return localStorage.getItem('token');
+	}
+
+	private decodeToken(): DecodeToken {
+		const token = this.getTokenStore();
+		if (!token) {
+			return null;
+		}
+
+		return jwtDecode(token);
 	}
 }

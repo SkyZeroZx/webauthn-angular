@@ -1,3 +1,3 @@
 export const environment = {
-	API_URL: 'http://localhost:3000/api'
+	API_URL: 'https://webauthn-angular-theta.vercel.app/api'
 };

@@ -1,0 +1,20 @@
+<mat-toolbar>
+	<span style="font-size: 2rem; font-weight: 400">Angular WebAuthn </span>
+	<span class="spacer"></span>
+
+	<button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+		<mat-icon fontIcon="account_circle" class="icon-lg" />
+	</button>
+	<mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
+		<mat-nav-list class="nav-list">
+			<span> Awesome User </span>
+		</mat-nav-list>
+
+		<mat-divider />
+
+		<button mat-menu-item>
+			<mat-icon fontIcon="exit_to_app" />
+			Log out
+		</button>
+	</mat-menu>
+</mat-toolbar>

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LandingComponent } from './landing.component';
+import { AuthenticatorComponent } from './authenticator.component';
 
-describe('LandingComponent', () => {
-	let component: LandingComponent;
-	let fixture: ComponentFixture<LandingComponent>;
+describe('AuthenticatorComponent', () => {
+	let component: AuthenticatorComponent;
+	let fixture: ComponentFixture<AuthenticatorComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			imports: [LandingComponent]
+			imports: [AuthenticatorComponent]
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(LandingComponent);
+		fixture = TestBed.createComponent(AuthenticatorComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

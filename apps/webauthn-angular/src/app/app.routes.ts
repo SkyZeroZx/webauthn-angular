@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { LandingComponent } from './pages/landing/landing.component';
+import { HomeComponent } from './pages/home/home.component';
 import { ContentLayoutComponent } from './layout/content/content-layout.component';
 
 export const appRoutes: Route[] = [
@@ -9,7 +9,7 @@ export const appRoutes: Route[] = [
 		children: [
 			{
 				path: '',
-				component: LandingComponent
+				component: HomeComponent
 			}
 		]
 	}

@@ -2,3 +2,12 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.register-dialog-container {
+    width: 600px;
+    height: 550px;
+    @media  (width <= 600px) {
+        width: 400px;
+        height: 550px;
+    }
+}
