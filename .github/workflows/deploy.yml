@@ -14,6 +14,7 @@ permissions:
 
 jobs:
   build:
+    name: Build Page
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +35,7 @@ jobs:
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
-      - run: npx nx affected -t lint test build
+      - run: npx nx run-many -t lint
       - run: npm run build:webauthn-angular:github-pages
       - uses: actions/cache@v3
         id: restore-build
