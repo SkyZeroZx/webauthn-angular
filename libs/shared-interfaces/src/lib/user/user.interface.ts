@@ -22,6 +22,8 @@ export interface User extends UserProfile {
 
 export type RegisterUser = Omit<User, 'authentications' | 'createdAt' | 'updateAt' | 'id'>;
 
+export type LoginUser = Omit<RegisterUser, 'name' | 'lastName'>;
+
 export interface UserAuthenticated {
 	token: string;
 	user: UserProfile;
