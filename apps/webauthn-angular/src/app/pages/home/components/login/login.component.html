@@ -1,0 +1,19 @@
+<mat-dialog-content>
+	<div class="register">
+		<h4 class="register__title" mat-dialog-title>Login</h4>
+		<form [formGroup]="loginForm" class="register__form">
+			<mat-form-field>
+				<mat-label>UserName</mat-label>
+				<input matInput formControlName="username" type="text" placeholder="Username" />
+			</mat-form-field>
+
+			<mat-form-field>
+				<mat-label>Password</mat-label>
+				<input matInput formControlName="password" type="password" placeholder="Password" />
+			</mat-form-field>
+			<button mat-flat-button (click)="login()" [disabled]="loginForm.invalid">
+				Login
+			</button>
+		</form>
+	</div>
+</mat-dialog-content>

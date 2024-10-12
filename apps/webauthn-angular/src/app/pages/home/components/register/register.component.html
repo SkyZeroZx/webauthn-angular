@@ -1,25 +1,26 @@
-<div style="padding: 1rem">
-	<h4 style="text-align: center">Sign In</h4>
-	<form
-		[formGroup]="registerForm"
-		style="display: flex; flex-direction: column; gap: 1rem; padding: 1rem"
-	>
-		<mat-form-field>
-			<mat-label>UserName</mat-label>
-			<input matInput formControlName="username" type="text" placeholder="Username" />
-		</mat-form-field>
-		<mat-form-field>
-			<mat-label>Name</mat-label>
-			<input matInput formControlName="name" type="text" placeholder="Name" />
-		</mat-form-field>
-		<mat-form-field>
-			<mat-label>Last Name</mat-label>
-			<input matInput formControlName="lastName" type="text" placeholder="Last Name" />
-		</mat-form-field>
-		<mat-form-field>
-			<mat-label>Password</mat-label>
-			<input matInput formControlName="password" type="password" placeholder="Password" />
-		</mat-form-field>
-		<button mat-flat-button (click)="register()" [disabled]="registerForm.invalid">Register</button>
-	</form>
+<div class="register">
+	<h4 class="register__title" mat-dialog-title>Sign In</h4>
+	<mat-dialog-content>
+		<form [formGroup]="registerForm" class="register__form">
+			<mat-form-field>
+				<mat-label>UserName</mat-label>
+				<input matInput formControlName="username" type="text" placeholder="Username" />
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Name</mat-label>
+				<input matInput formControlName="name" type="text" placeholder="Name" />
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Last Name</mat-label>
+				<input matInput formControlName="lastName" type="text" placeholder="Last Name" />
+			</mat-form-field>
+			<mat-form-field>
+				<mat-label>Password</mat-label>
+				<input matInput formControlName="password" type="password" placeholder="Password" />
+			</mat-form-field>
+			<button mat-flat-button (click)="register()" [disabled]="registerForm.invalid">
+				Register
+			</button>
+		</form>
+	</mat-dialog-content>
 </div>

@@ -1,7 +1,7 @@
 import { from, map, switchMap, tap } from 'rxjs';
 
-import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { inject, Injectable, signal } from '@angular/core';
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser';
 import {
 	AuthenticationResponseJSON,
@@ -20,6 +20,12 @@ import { AuthService } from '../auth';
 export class WebAuthnService {
 	private readonly http = inject(HttpClient);
 	private readonly authService = inject(AuthService);
+
+	private readonly authenticationResponseJSON = signal<AuthenticationResponseJSON>(null);
+
+	get payload() {
+		return this.authenticationResponseJSON.asReadonly();
+	}
 
 	private generateRegistrationOptions() {
 		return this.http
@@ -48,10 +54,12 @@ export class WebAuthnService {
 	}
 
 	private generateAuthenticationOptions() {
+		let headers = new HttpHeaders();
+		headers = headers.set('x-username', localStorage.getItem('username'));
 		return this.http
 			.get<
 				ResponseFormat<PublicKeyCredentialRequestOptionsJSON>
-			>(`${environment.API_URL}/auth/generate-authentication-options`)
+			>(`${environment.API_URL}/auth/generate-authentication-options`, { headers })
 			.pipe(map(({ data }) => data));
 	}
 
@@ -60,9 +68,13 @@ export class WebAuthnService {
 	}
 
 	private verifyAuthentication(response: AuthenticationResponseJSON) {
-		return this.http.post<ResponseFormat<UserAuthenticated>>(
+		let headers = new HttpHeaders();
+		headers = headers.set('x-username', localStorage.getItem('username'));
+		this.authenticationResponseJSON.set(response);
+		return this.http.post<ResponseFormat<{ userAuthenticated: UserAuthenticated; data: unknown }>>(
 			`${environment.API_URL}/auth/verify-authentication`,
-			response
+			response,
+			{ headers }
 		);
 	}
 
@@ -72,12 +84,16 @@ export class WebAuthnService {
 				switchMap((options) => this.startAuthentication(options)),
 				switchMap((res) => this.verifyAuthentication(res))
 			)
-			.pipe(tap(({ data }) => this.authService.saveUserStorage(data)));
+			.pipe(tap(({ data }) => this.authService.saveUserStorage(data.userAuthenticated)));
 	}
 
 	getAuthenticators() {
 		return this.http
 			.get<ResponseFormat<Authentication[]>>(`${environment.API_URL}/auth/authenticators`)
 			.pipe(map(({ data }) => data));
+	}
+
+	isAvailable() {
+		return from(PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable());
 	}
 }

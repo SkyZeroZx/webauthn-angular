@@ -11,6 +11,7 @@ import {
 } from '@skyzerozx/shared-interfaces';
 
 import { environment } from '../../../environments/environment';
+import { STORAGE_KEYS } from '../../core/constants';
 
 @Injectable({
 	providedIn: 'root'
@@ -34,7 +35,8 @@ export class AuthService {
 	}
 
 	saveUserStorage({ token, user }: UserAuthenticated) {
-		localStorage.setItem('token', token);
+		localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+		localStorage.setItem(STORAGE_KEYS.USERNAME, user.username);
 		this.userStorage.set(user);
 	}
 
@@ -53,5 +55,10 @@ export class AuthService {
 		}
 
 		return jwtDecode(token);
+	}
+
+	logout() {
+		localStorage.removeItem(STORAGE_KEYS.TOKEN);
+		this.userStorage.set(null);
 	}
 }

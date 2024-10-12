@@ -1,10 +1,14 @@
 .spacer {
-  flex: 1 1 auto;
+	flex: 1 1 auto;
 }
-
 
 .nav-list {
 	text-align: center;
 	margin-left: 25px;
 	margin-right: 25px;
+}
+
+.nav-bar-title {
+	font-size: 2rem;
+	font-weight: 400;
 }

@@ -1,4 +1,4 @@
-<app-auth-options />
+<app-auth-options (onRegisterAuthenticator)="onRefreshAuthenticators()" />
 
 <main class="main-authenticators">
 	@for (authenticator of authenticators(); track authenticator.id) {

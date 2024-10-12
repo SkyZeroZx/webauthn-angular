@@ -1,16 +1,16 @@
-<mat-card appearance="outlined" style="width: 400px; height: 400px; margin: 20px">
+<mat-card appearance="outlined" class="authenticator">
 	@let item = authenticator();
 	<mat-card-header>
-		<div style="display: flex; justify-content: space-between; width: 100%">
-			<p style="width: 70%">{{ item.device }}</p>
+		<div class="authenticator__header">
+			<p class="authenticator__header__title">{{ item.device }}</p>
 			<button mat-icon-button>
 				<mat-icon fontIcon="delete_forever" class="icon-lg" />
 			</button>
 		</div>
 	</mat-card-header>
 	<mat-divider />
-	<mat-card-content style="overflow-y: auto">
-		<div style="display: flex; flex-direction: column; gap: 0.5rem; padding: 1rem">
+	<mat-card-content class="authenticator__content">
+		<div class="authenticator__content__items">
 			<dt>Credential Type</dt>
 			<dd>{{ item.credentialDeviceType }}</dd>
 
@@ -24,7 +24,7 @@
 			<dd>{{ item.credentialID }}</dd>
 
 			<dt>Public Key</dt>
-			<dd style="text-overflow: ellipsis">
+			<dd >
 				{{ item.credentialPublicKey  | bufferToBase64}}
 			</dd>
 		</div>

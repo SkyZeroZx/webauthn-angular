@@ -11,47 +11,46 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RegisterUser } from '@skyzerozx/shared-interfaces';
+import { LoginUser } from '@skyzerozx/shared-interfaces';
 
 import { MAT_FORM_FIELD_CUSTOM } from '../../../../core/config';
 import { TypedFormControls } from '../../../../core/interface/forms/forms.interface';
 import { AuthService } from '../../../../services/auth';
 
 @Component({
-	selector: 'app-register',
+	selector: 'app-login',
 	standalone: true,
 	imports: [
 		FormsModule,
 		ReactiveFormsModule,
 		MatFormFieldModule,
+		MatDialogModule,
 		MatButtonModule,
-		MatInputModule,
-		MatDialogModule
+		MatInputModule
 	],
-	templateUrl: './register.component.html',
-	styleUrl: './register.component.scss',
-	providers: [MAT_FORM_FIELD_CUSTOM],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	templateUrl: './login.component.html',
+	styleUrl: './login.component.scss',
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	providers: [MAT_FORM_FIELD_CUSTOM]
 })
-export class RegisterComponent {
+export class LoginComponent {
 	private readonly authService = inject(AuthService);
 	private readonly snackBar = inject(MatSnackBar);
 	private readonly formBuilder = inject(FormBuilder);
 
-	onRegister = output<void>();
+	onLogin = output<void>();
 
-	registerForm: FormGroup<TypedFormControls<RegisterUser>> = this.formBuilder.group({
+	loginForm: FormGroup<TypedFormControls<LoginUser>> = this.formBuilder.group({
 		username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]],
-		password: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(128)]],
-		name: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(80)]],
-		lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]]
+		password: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(128)]]
 	});
 
-	register() {
-		this.authService.register(this.registerForm.getRawValue()).subscribe({
+	login() {
+		const { username, password } = this.loginForm.getRawValue();
+		this.authService.login(username, password).subscribe({
 			next: () => {
-				this.snackBar.open('User Registration Success', 'OK');
-				this.onRegister.emit();
+				this.snackBar.open('User login with credentials', 'OK');
+				this.onLogin.emit();
 			}
 		});
 	}

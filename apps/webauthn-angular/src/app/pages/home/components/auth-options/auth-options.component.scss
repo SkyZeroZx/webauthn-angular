@@ -1,0 +1,11 @@
+.auth-options {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	gap: 1rem;
+	padding: 1rem;
+
+	@media (width <= 768px) {
+		flex-direction: column;
+	}
+}

@@ -1,13 +1,12 @@
-<section style="display: flex; flex-direction: row; justify-content: flex-end; gap: 1rem; padding: 1rem;">
-
+<section class="auth-options">
 	<button mat-button (click)="isAvariableWebAuthn()">
-		<mat-icon fontIcon="check_circle" class="icon-lg" /> 
-        ISUVPPA
+		<mat-icon fontIcon="check_circle" class="icon-lg" />
+		ISUVPPA
 	</button>
 
 	<button mat-button (click)="registerWebAuthn()">
-		<mat-icon fontIcon="fingerprint" class="icon-lg" /> 
-        REGISTER AUTHENTICATOR
+		<mat-icon fontIcon="fingerprint" class="icon-lg" />
+		REGISTER AUTHENTICATOR
 	</button>
 
 	<button mat-button (click)="loginWebAuthn()">
