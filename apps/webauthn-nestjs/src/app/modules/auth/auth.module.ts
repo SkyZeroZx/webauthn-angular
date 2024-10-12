@@ -8,10 +8,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { ChallengeService } from './challenge.service';
 import { AuthenticationEntity } from './entities/authentication.entity';
-import {
-	JwtStrategy,
-	LocalStrategy
-} from './strategies';
+import { JwtStrategy, LocalStrategy } from './strategies';
 import { WebAuthnService } from './web-authn.service';
 
 @Module({
@@ -22,13 +19,7 @@ import { WebAuthnService } from './web-authn.service';
 		UserModule,
 		PassportModule
 	],
-	providers: [
-		AuthService,
-		LocalStrategy,
-		JwtStrategy,
-		ChallengeService,
-		WebAuthnService
-	],
+	providers: [AuthService, LocalStrategy, JwtStrategy, ChallengeService, WebAuthnService],
 	exports: [AuthService]
 })
 export class AuthModule {}

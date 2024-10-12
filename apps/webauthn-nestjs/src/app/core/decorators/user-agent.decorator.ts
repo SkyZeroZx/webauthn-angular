@@ -1,7 +1,7 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import { parseUserAgent } from './parse-user-agent';
 
-export const ExtractUserAgent = (data: string, ctx: ExecutionContext) => {
+export const ExtractUserAgent = (_data: string, ctx: ExecutionContext) => {
 	const request = ctx.switchToHttp().getRequest();
 	console.log(request.get('user-agent'));
 

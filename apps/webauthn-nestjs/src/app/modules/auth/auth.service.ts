@@ -7,6 +7,7 @@ import { VerifiedRegistrationResponse } from '@simplewebauthn/server';
 import { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/types';
 import { User, UserAuthenticated } from '@skyzerozx/shared-interfaces';
 
+import { UserService } from '../user';
 import { ChallengeService } from './challenge.service';
 import { AuthenticationEntity } from './entities/authentication.entity';
 import { WebAuthnService } from './web-authn.service';
@@ -19,7 +20,8 @@ export class AuthService {
 		private readonly authenticationRepository: Repository<AuthenticationEntity>,
 		private readonly jwtService: JwtService,
 		private readonly challengeService: ChallengeService,
-		private readonly webAuthnService: WebAuthnService
+		private readonly webAuthnService: WebAuthnService,
+		private readonly userService: UserService
 	) {}
 
 	async generateRegistrationOptions(username: string) {
@@ -75,6 +77,7 @@ export class AuthService {
 	}
 
 	generateToken(user: User): UserAuthenticated {
+		delete user.password;
 		const token = this.jwtService.sign({ ...user });
 		return { token, user };
 	}
@@ -98,10 +101,11 @@ export class AuthService {
 		return options;
 	}
 
-	async verifyAuthentication(user: User, data: AuthenticationResponseJSON) {
-		const [authenticator, challenge] = await Promise.all([
-			this.findAuthenticatorById(data.id, 'jburgo33433st@unac.edu.pe'),
-			this.challengeService.findByUsername('jburgo33433st@unac.edu.pe')
+	async verifyAuthentication(username: string, data: AuthenticationResponseJSON) {
+		const [authenticator, challenge, user] = await Promise.all([
+			this.findAuthenticatorByIdwithUserName(data.id, username),
+			this.challengeService.findByUsername(username),
+			this.userService.findByUsername(username)
 		]);
 
 		const { verified, authenticationInfo } =
@@ -114,11 +118,12 @@ export class AuthService {
 			});
 			throw new UnauthorizedException('Authentication failed');
 		}
+
 		const userAuthenticated = this.generateToken(user);
-		return { ...userAuthenticated, authenticationInfo, verified };
+		return { userAuthenticated, authenticationInfo, verified };
 	}
 
-	async findAuthenticatorById(id: string, username: string) {
+	async findAuthenticatorByIdwithUserName(id: string, username: string) {
 		return this.authenticationRepository.findOne({
 			where: {
 				id,
