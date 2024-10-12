@@ -6,6 +6,7 @@
     "start:webauthn-angular": "nx run webauthn-angular:serve",
     "start:webauthn-nestjs": "nx run webauthn-nestjs:serve --configuration=development",
     "build": "nx run-many -t build",
+    "build:webauthn-angular:github-pages": "nx build webauthn-angular --configuration production-github-pages",
     "build:webauthn-nestjs": "nx run webauthn-nestjs:build --configuration=production",
     "build:webauthn-angular": "nx run webauthn-angular:build --configuration=production",
     "lint:affected": "nx affected -t lint",

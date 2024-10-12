@@ -52,6 +52,22 @@
           ],
           "outputHashing": "all"
         },
+        "production-github-pages": {
+          "baseHref": "https://skyzerozx.github.io/webauthn-angular/",
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
         "development": {
           "optimization": false,
           "extractLicenses": false,
