@@ -1,12 +1,12 @@
 import { ReplaySubject, shareReplay, switchMap } from 'rxjs';
 
+import { AuthService } from '@/services/auth';
+import { WebAuthnService } from '@/services/web-authn';
 import { JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 
-import { AuthService } from '../../services/auth';
-import { WebAuthnService } from '../../services/web-authn';
 import { AuthenticatorComponent, AuthOptionsComponent, RegisterComponent } from './components';
 
 @Component({

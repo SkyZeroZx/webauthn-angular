@@ -1,14 +1,14 @@
+import { catchError, throwError } from 'rxjs';
+
+import { DEFAULT_ERROR } from '@/core/constants';
 import {
-	HttpInterceptorFn,
-	HttpRequest,
+	HttpErrorResponse,
 	HttpHandlerFn,
-	HttpErrorResponse
+	HttpInterceptorFn,
+	HttpRequest
 } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-export const DEFAULT_ERROR = 'Error unknown';
 
 export const errorInterceptor: HttpInterceptorFn = (
 	request: HttpRequest<unknown>,

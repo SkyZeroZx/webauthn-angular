@@ -1,3 +1,6 @@
+import { MAT_FORM_FIELD_CUSTOM } from '@/core/config';
+import { TypedFormControls } from '@/core/interface/forms/forms.interface';
+import { AuthService } from '@/services/auth';
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import {
 	FormBuilder,
@@ -12,10 +15,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RegisterUser } from '@skyzerozx/shared-interfaces';
-
-import { MAT_FORM_FIELD_CUSTOM } from '../../../../core/config';
-import { TypedFormControls } from '../../../../core/interface/forms/forms.interface';
-import { AuthService } from '../../../../services/auth';
 
 @Component({
 	selector: 'app-register',

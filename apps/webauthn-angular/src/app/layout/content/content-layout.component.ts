@@ -1,8 +1,9 @@
+import { ProgressService } from '@/services/progress';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ProgressService } from '../../services/progress';
+import { RouterModule } from '@angular/router';
+
+import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 
 @Component({
 	selector: 'app-content-layout',

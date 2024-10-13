@@ -1,13 +1,12 @@
 import { tap } from 'rxjs';
 
+import { WebAuthnService } from '@/services/web-authn';
+import { JsonViewerComponent } from '@/shared';
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import { WebAuthnService } from '../../../../services/web-authn';
-import { JsonViewerComponent } from '../../../../shared';
 
 @Component({
 	selector: 'app-auth-options',
@@ -45,7 +44,7 @@ export class AuthOptionsComponent {
 			.onAction()
 			.subscribe(() => {
 				this.matDialog.open(JsonViewerComponent, {
-					panelClass : 'json-viewer-dialog-container',
+					panelClass: 'json-viewer-dialog-container',
 					data: { json: { ...this.webAuthnService.payload() }, title: 'Payload' }
 				});
 			});

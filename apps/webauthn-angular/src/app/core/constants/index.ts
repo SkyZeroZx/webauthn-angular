@@ -1,1 +1,2 @@
-export * from './storage.constant';
+export * from './error/error.constant';
+export * from './storage/storage.constant';
