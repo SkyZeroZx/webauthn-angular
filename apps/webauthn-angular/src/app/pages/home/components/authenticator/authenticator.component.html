@@ -3,9 +3,6 @@
 	<mat-card-header>
 		<div class="authenticator__header">
 			<p class="authenticator__header__title">{{ item.device }}</p>
-			<button mat-icon-button>
-				<mat-icon fontIcon="delete_forever" class="icon-lg" />
-			</button>
 		</div>
 	</mat-card-header>
 	<mat-divider />
@@ -24,8 +21,8 @@
 			<dd>{{ item.credentialID }}</dd>
 
 			<dt>Public Key</dt>
-			<dd >
-				{{ item.credentialPublicKey  | bufferToBase64}}
+			<dd>
+				{{ item.credentialPublicKey | bufferToBase64 }}
 			</dd>
 		</div>
 	</mat-card-content>

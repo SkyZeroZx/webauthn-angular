@@ -1,19 +1,22 @@
-<mat-dialog-content>
-	<div class="register">
-		<h4 class="register__title" mat-dialog-title>Login</h4>
-		<form [formGroup]="loginForm" class="register__form">
-			<mat-form-field>
-				<mat-label>UserName</mat-label>
-				<input matInput formControlName="username" type="text" placeholder="Username" />
-			</mat-form-field>
+<div class="login">
+	<h4 class="login__title" mat-dialog-title>Log In</h4>
+	<form [formGroup]="loginForm" class="login__form">
+		<mat-form-field>
+			<mat-label>UserName</mat-label>
+			<input matInput formControlName="username" type="text" placeholder="Username" />
+		</mat-form-field>
 
-			<mat-form-field>
-				<mat-label>Password</mat-label>
-				<input matInput formControlName="password" type="password" placeholder="Password" />
-			</mat-form-field>
-			<button mat-flat-button (click)="login()" [disabled]="loginForm.invalid">
-				Login
-			</button>
-		</form>
-	</div>
-</mat-dialog-content>
+		<mat-form-field>
+			<mat-label>Password</mat-label>
+			<input matInput formControlName="password" type="password" placeholder="Password" />
+		</mat-form-field>
+	</form>
+</div>
+
+<div mat-dialog-actions class="login__actions">
+	<button mat-flat-button (click)="login()" [disabled]="loginForm.invalid || isLoading()">
+		Log In
+	</button>
+
+	<button mat-button (click)="goBack()" [disabled]="isLoading()">Go Back</button>
+</div>

@@ -1,7 +1,8 @@
 import { MAT_FORM_FIELD_CUSTOM } from '@/core/config';
 import { TypedFormControls } from '@/core/interface/forms/forms.interface';
 import { AuthService } from '@/services/auth';
-import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, output, signal } from '@angular/core';
 import {
 	FormBuilder,
 	FormGroup,
@@ -15,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RegisterUser } from '@skyzerozx/shared-interfaces';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
 	selector: 'app-register',
@@ -25,7 +27,9 @@ import { RegisterUser } from '@skyzerozx/shared-interfaces';
 		MatFormFieldModule,
 		MatButtonModule,
 		MatInputModule,
-		MatDialogModule
+		MatDialogModule,
+		NgTemplateOutlet,
+		LoginComponent
 	],
 	templateUrl: './register.component.html',
 	styleUrl: './register.component.scss',
@@ -36,8 +40,10 @@ export class RegisterComponent {
 	private readonly authService = inject(AuthService);
 	private readonly snackBar = inject(MatSnackBar);
 	private readonly formBuilder = inject(FormBuilder);
+	readonly isLoading = this.authService.isLoading;
 
-	onRegister = output<void>();
+	onClose = output<void>();
+	hasAccount = signal(false);
 
 	registerForm: FormGroup<TypedFormControls<RegisterUser>> = this.formBuilder.group({
 		username: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(255)]],
@@ -46,11 +52,19 @@ export class RegisterComponent {
 		lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(255)]]
 	});
 
+	hideLogin() {
+		this.hasAccount.set(false);
+	}
+
+	showLogin() {	
+		this.hasAccount.set(true);
+	}
+
 	register() {
 		this.authService.register(this.registerForm.getRawValue()).subscribe({
 			next: () => {
 				this.snackBar.open('User Registration Success', 'OK');
-				this.onRegister.emit();
+				this.onClose.emit();
 			}
 		});
 	}

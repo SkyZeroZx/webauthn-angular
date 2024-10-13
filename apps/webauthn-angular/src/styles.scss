@@ -11,18 +11,16 @@ body {
 
 .register-dialog-container {
 	width: 600px;
-	height: 600px;
+
 	@media (width <= 600px) {
 		width: 400px;
-		height: 550px;
 	}
 }
 
 .json-viewer-dialog-container {
-	width: 600px;
-	height: 560px;
+	width: 900px;
+
 	@media (width <= 600px) {
 		width: 400px;
-		height: 530px;
 	}
 }

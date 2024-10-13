@@ -40,7 +40,7 @@ export class HomeComponent implements OnInit {
 			switchMap(() => authenticators$),
 			shareReplay(1)
 		);
-		console.log('Authenticators');
+
 		return toSignal(refreshAuthenticators$, {
 			initialValue: []
 		});
@@ -56,6 +56,6 @@ export class HomeComponent implements OnInit {
 			disableClose: true
 		});
 
-		dialogRef.componentRef.instance.onRegister.subscribe(() => dialogRef.close());
+		dialogRef.componentRef.instance.onClose.subscribe(() => dialogRef.close());
 	}
 }

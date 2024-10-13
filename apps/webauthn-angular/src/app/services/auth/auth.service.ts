@@ -1,4 +1,4 @@
-import { concatMap, tap } from 'rxjs';
+import { concatMap, finalize, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
@@ -19,19 +19,35 @@ import { STORAGE_KEYS } from '../../core/constants';
 export class AuthService {
 	private readonly http = inject(HttpClient);
 	private readonly userStorage = signal<UserProfile>(this.decodeToken());
+	private readonly _isLoading = signal(false);
+
+	get isLoading() {
+		return this._isLoading.asReadonly();
+	}
 
 	register(registerUser: RegisterUser) {
+		this._isLoading.set(false);
 		return this.http
 			.post<ResponseFormat<UserProfile>>(`${environment.API_URL}/users/register`, registerUser)
-			.pipe(concatMap(() => this.login(registerUser.username, registerUser.password)));
+			.pipe(
+				tap(() => this._isLoading.set(true)),
+				concatMap(() => this.login(registerUser.username, registerUser.password)),
+				finalize(() => this._isLoading.set(false))
+			);
 	}
 
 	login(username: string, password: string) {
+		this._isLoading.set(false);
+
 		return this.http
 			.post<
 				ResponseFormat<UserAuthenticated>
 			>(`${environment.API_URL}/auth/login`, { username, password })
-			.pipe(tap(({ data }) => this.saveUserStorage(data)));
+			.pipe(
+				tap(() => this._isLoading.set(true)),
+				tap(({ data }) => this.saveUserStorage(data)),
+				finalize(() => this._isLoading.set(false))
+			);
 	}
 
 	saveUserStorage({ token, user }: UserAuthenticated) {
