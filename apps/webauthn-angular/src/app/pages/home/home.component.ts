@@ -56,6 +56,9 @@ export class HomeComponent implements OnInit {
 			disableClose: true
 		});
 
-		dialogRef.componentRef.instance.onClose.subscribe(() => dialogRef.close());
+		dialogRef.componentRef.instance.onClose.subscribe(() => {
+			dialogRef.close();
+			this.refreshSubject.next();
+		});
 	}
 }
