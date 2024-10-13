@@ -39,13 +39,24 @@ export class AuthOptionsComponent {
 	}
 
 	snackPayloadMessage() {
+		const payload = this.webAuthnService.payload();
+		const { response } = payload;
 		this.snackBar
 			.open('Show Payload Message', 'Show Payload')
 			.onAction()
 			.subscribe(() => {
 				this.matDialog.open(JsonViewerComponent, {
 					panelClass: 'json-viewer-dialog-container',
-					data: { json: { ...this.webAuthnService.payload() }, title: 'Payload' }
+					data: {
+						json: {
+							...payload,
+							response: {
+								...response,
+								clientDataJSON: JSON.parse(atob(response.clientDataJSON))
+							}
+						},
+						title: 'Payload'
+					}
 				});
 			});
 	}
