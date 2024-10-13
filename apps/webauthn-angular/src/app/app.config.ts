@@ -1,5 +1,7 @@
 import { provideMarkdown } from 'ngx-markdown';
 
+import { MAT_SNACK_BAR_CONFIG } from '@/core/config';
+import { errorInterceptor, progressInterceptor, tokenInterceptor } from '@/core/interceptors';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -8,7 +10,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { provideRouter, withHashLocation } from '@angular/router';
 
 import { appRoutes } from './app.routes';
-import { errorInterceptor, progressInterceptor, tokenInterceptor } from './core/interceptors';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -20,6 +21,7 @@ export const appConfig: ApplicationConfig = {
 			withInterceptors([tokenInterceptor, errorInterceptor, progressInterceptor])
 		),
 		provideAnimationsAsync(),
-		provideMarkdown()
+		provideMarkdown(),
+		MAT_SNACK_BAR_CONFIG
 	]
 };
