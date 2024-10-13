@@ -20,9 +20,9 @@ body {
 
 .json-viewer-dialog-container {
 	width: 600px;
-	height: 550px;
+	height: 560px;
 	@media (width <= 600px) {
 		width: 400px;
-		height: 400px;
+		height: 530px;
 	}
 }
