@@ -1,6 +1,6 @@
 import { catchError, throwError } from 'rxjs';
 
-import { DEFAULT_ERROR } from '@/core/constants';
+import { DEFAULT_ERROR, DUPLICATE_CONSTRAINT } from '@/core/constants';
 import {
 	HttpErrorResponse,
 	HttpHandlerFn,
@@ -33,10 +33,21 @@ export const errorInterceptor: HttpInterceptorFn = (
 			if (returnedError?.error?.title || returnedError?.error?.type) {
 				snackBar.open(DEFAULT_ERROR);
 			} else {
-				snackBar.open(`${returnedError?.error?.message || returnedError?.error || DEFAULT_ERROR}`);
+				snackBar.open(`${mappedErrors(returnedError)}`);
 			}
 
 			return throwError(() => new Error(errorMessage || DEFAULT_ERROR));
 		})
 	);
+};
+
+const mappedErrors = (returnedError: any) => {
+	const message = returnedError?.error?.message;
+	const isDuplicated = message.includes(DUPLICATE_CONSTRAINT);
+
+	if (isDuplicated) {
+		return 'User already exists';
+	}
+
+	return DEFAULT_ERROR;
 };
