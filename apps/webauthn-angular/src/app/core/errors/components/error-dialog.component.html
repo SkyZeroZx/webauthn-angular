@@ -1,0 +1,13 @@
+<div class="error-dialog">
+	<h4>{{ data.title }}</h4>
+
+	<div>
+		<mat-icon class="icon-xl" [fontIcon]="data.icon" />
+	</div>
+
+	<p>{{ data.message }}</p>
+
+	<div>
+		<button mat-button (click)="close()">OK</button>
+	</div>
+</div>

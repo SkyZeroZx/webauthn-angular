@@ -1,6 +1,7 @@
 import { provideMarkdown } from 'ngx-markdown';
 
 import { MAT_SNACK_BAR_CONFIG } from '@/core/config';
+import { GLOBAL_ERROR_HANDLER } from '@/core/errors';
 import { errorInterceptor, progressInterceptor, tokenInterceptor } from '@/core/interceptors';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
@@ -22,6 +23,7 @@ export const appConfig: ApplicationConfig = {
 		),
 		provideAnimationsAsync(),
 		provideMarkdown(),
-		MAT_SNACK_BAR_CONFIG
+		MAT_SNACK_BAR_CONFIG,
+		GLOBAL_ERROR_HANDLER
 	]
 };

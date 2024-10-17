@@ -1,0 +1,16 @@
+.error-dialog {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	padding: 1rem;
+	gap: 1.5rem;
+	height: 100%;
+}
+
+mat-icon {
+	font-size: 50px;
+	height: 50px;
+	width: 50px;
+	color: #f8bb86;
+}
