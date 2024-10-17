@@ -1,6 +1,8 @@
 import { MAT_FORM_FIELD_CUSTOM } from '@/core/config';
+import { STORAGE_KEYS } from '@/core/constants';
 import { TypedFormControls } from '@/core/interface';
 import { AuthService } from '@/services/auth';
+import { WebAuthnService } from '@/services/web-authn';
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import {
 	FormBuilder,
@@ -12,6 +14,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginUser } from '@skyzerozx/shared-interfaces';
@@ -25,7 +28,8 @@ import { LoginUser } from '@skyzerozx/shared-interfaces';
 		MatFormFieldModule,
 		MatDialogModule,
 		MatButtonModule,
-		MatInputModule
+		MatInputModule,
+		MatIconModule
 	],
 	templateUrl: './login.component.html',
 	styleUrl: './login.component.scss',
@@ -36,6 +40,10 @@ export class LoginComponent {
 	private readonly authService = inject(AuthService);
 	private readonly snackBar = inject(MatSnackBar);
 	private readonly formBuilder = inject(FormBuilder);
+	private readonly webAuthnService = inject(WebAuthnService);
+
+	readonly hasUserNameStored = localStorage.getItem(STORAGE_KEYS.USERNAME);
+
 	readonly isLoading = this.authService.isLoading;
 
 	onLogin = output<void>();
@@ -49,6 +57,15 @@ export class LoginComponent {
 	goBack() {
 		this.onGoBack.emit();
 		this.loginForm.reset();
+	}
+
+	loginWithWebAuthn() {
+		this.webAuthnService.login().subscribe({
+			next: () => {
+				this.snackBar.open('User login with WebAuthn', 'OK');
+				this.onLogin.emit();
+			}
+		});
 	}
 
 	login() {

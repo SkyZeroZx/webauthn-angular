@@ -1,5 +1,5 @@
 import { ProgressService } from '@/services/progress';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RouterModule } from '@angular/router';
 
@@ -16,5 +16,5 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 export class ContentLayoutComponent {
 	private readonly progressService = inject(ProgressService);
 
-	isVisible = this.progressService.isVisible;
+	visibility = computed(() => (this.progressService.isVisible() ? 'visible' : 'hidden'));
 }

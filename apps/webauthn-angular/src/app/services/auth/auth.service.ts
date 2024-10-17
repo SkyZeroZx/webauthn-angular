@@ -1,5 +1,7 @@
-import { concatMap, finalize, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
+import { concatMap, finalize, tap } from 'rxjs';
+
+import { REFRESH_RESET, STORAGE_KEYS } from '@/core/constants';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import {
@@ -11,7 +13,7 @@ import {
 } from '@skyzerozx/shared-interfaces';
 
 import { environment } from '../../../environments/environment';
-import { STORAGE_KEYS } from '../../core/constants';
+import { RefreshService } from '../refresh';
 
 @Injectable({
 	providedIn: 'root'
@@ -20,6 +22,7 @@ export class AuthService {
 	private readonly http = inject(HttpClient);
 	private readonly userStorage = signal<UserProfile>(this.decodeToken());
 	private readonly _isLoading = signal(false);
+	private readonly refreshService = inject(RefreshService);
 
 	get isLoading() {
 		return this._isLoading.asReadonly();
@@ -61,7 +64,7 @@ export class AuthService {
 	}
 
 	getTokenStore() {
-		return localStorage.getItem('token');
+		return localStorage.getItem(STORAGE_KEYS.TOKEN);
 	}
 
 	private decodeToken(): DecodeToken {
@@ -76,5 +79,6 @@ export class AuthService {
 	logout() {
 		localStorage.removeItem(STORAGE_KEYS.TOKEN);
 		this.userStorage.set(null);
+		this.refreshService.refresh(REFRESH_RESET);
 	}
 }

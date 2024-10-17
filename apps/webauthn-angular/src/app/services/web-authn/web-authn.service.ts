@@ -4,15 +4,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser';
 import {
-	AuthenticationResponseJSON,
-	PublicKeyCredentialCreationOptionsJSON,
-	PublicKeyCredentialRequestOptionsJSON,
-	RegistrationResponseJSON
+    AuthenticationResponseJSON, PublicKeyCredentialCreationOptionsJSON,
+    PublicKeyCredentialRequestOptionsJSON, RegistrationResponseJSON
 } from '@simplewebauthn/types';
 import { Authentication, ResponseFormat, UserAuthenticated } from '@skyzerozx/shared-interfaces';
 
 import { environment } from '../../../environments/environment';
 import { AuthService } from '../auth';
+import { RefreshService } from '../refresh';
 
 @Injectable({
 	providedIn: 'root'
@@ -20,6 +19,7 @@ import { AuthService } from '../auth';
 export class WebAuthnService {
 	private readonly http = inject(HttpClient);
 	private readonly authService = inject(AuthService);
+	private readonly refreshService = inject(RefreshService);
 
 	private readonly authenticationResponseJSON = signal<AuthenticationResponseJSON>(null);
 
@@ -84,7 +84,10 @@ export class WebAuthnService {
 				switchMap((options) => this.startAuthentication(options)),
 				switchMap((res) => this.verifyAuthentication(res))
 			)
-			.pipe(tap(({ data }) => this.authService.saveUserStorage(data.userAuthenticated)));
+			.pipe(
+				tap(({ data }) => this.authService.saveUserStorage(data.userAuthenticated)),
+				tap(() => this.refreshService.refresh())
+			);
 	}
 
 	getAuthenticators() {

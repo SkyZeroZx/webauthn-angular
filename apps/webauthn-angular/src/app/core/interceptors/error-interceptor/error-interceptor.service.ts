@@ -48,6 +48,6 @@ const mappedErrors = (returnedError: any) => {
 	if (isDuplicated) {
 		return 'User already exists';
 	}
-
-	return DEFAULT_ERROR;
+	
+	return returnedError?.error?.message ??  DEFAULT_ERROR;
 };

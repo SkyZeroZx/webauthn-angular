@@ -1,8 +1,9 @@
-import { ReplaySubject, shareReplay, switchMap } from 'rxjs';
+import { of, shareReplay, switchMap } from 'rxjs';
 
+import { REFRESH_RESET } from '@/core/constants';
 import { AuthService } from '@/services/auth';
+import { RefreshService } from '@/services/refresh';
 import { WebAuthnService } from '@/services/web-authn';
-import { JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,7 +13,7 @@ import { AuthenticatorComponent, AuthOptionsComponent, RegisterComponent } from 
 @Component({
 	selector: 'app-home',
 	standalone: true,
-	imports: [JsonPipe, AuthenticatorComponent, RegisterComponent, AuthOptionsComponent],
+	imports: [AuthenticatorComponent, RegisterComponent, AuthOptionsComponent],
 	templateUrl: './home.component.html',
 	styleUrl: './home.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -21,9 +22,8 @@ export class HomeComponent implements OnInit {
 	private readonly authService = inject(AuthService);
 	private readonly webAuthnService = inject(WebAuthnService);
 	private readonly dialogService = inject(MatDialog);
-
+	private readonly refreshService = inject(RefreshService);
 	readonly user = this.authService.user;
-	private readonly refreshSubject = new ReplaySubject<void>(1);
 
 	authenticators = this.getAuthenticators();
 
@@ -31,13 +31,14 @@ export class HomeComponent implements OnInit {
 		if (!this.user()) {
 			return this.showRegister();
 		}
-		this.refreshSubject.next();
+
+		this.refreshService.refresh();
 	}
 
 	getAuthenticators() {
 		const authenticators$ = this.webAuthnService.getAuthenticators();
-		const refreshAuthenticators$ = this.refreshSubject.asObservable().pipe(
-			switchMap(() => authenticators$),
+		const refreshAuthenticators$ = this.refreshService.refresh$.pipe(
+			switchMap((value) => (value === REFRESH_RESET ? of([]) : authenticators$)),
 			shareReplay(1)
 		);
 
@@ -47,7 +48,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	onRefreshAuthenticators() {
-		this.refreshSubject.next();
+		this.refreshService.refresh();
 	}
 
 	showRegister() {
@@ -58,7 +59,7 @@ export class HomeComponent implements OnInit {
 
 		dialogRef.componentRef.instance.onClose.subscribe(() => {
 			dialogRef.close();
-			this.refreshSubject.next();
+			this.refreshService.refresh();
 		});
 	}
 }

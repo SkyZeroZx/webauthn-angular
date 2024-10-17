@@ -6,6 +6,11 @@
 		margin: 0.2rem;
 	}
 
+	@media (width <= 600px) {
+		width: 350px;
+		height: 350px;
+	}
+
 	&__header {
 		display: flex;
 		justify-content: space-between;

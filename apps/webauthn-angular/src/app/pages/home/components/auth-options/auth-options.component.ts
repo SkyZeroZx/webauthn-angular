@@ -1,5 +1,6 @@
 import { tap } from 'rxjs';
 
+import { AuthService } from '@/services/auth';
 import { WebAuthnService } from '@/services/web-authn';
 import { JsonViewerComponent } from '@/shared';
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
@@ -20,6 +21,8 @@ export class AuthOptionsComponent {
 	private readonly webAuthnService = inject(WebAuthnService);
 	private readonly snackBar = inject(MatSnackBar);
 	private readonly matDialog = inject(MatDialog);
+	private readonly authService = inject(AuthService);
+	user = this.authService.user
 	onRegisterAuthenticator = output<void>();
 
 	registerWebAuthn() {
