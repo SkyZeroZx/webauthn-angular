@@ -19,7 +19,7 @@ export interface Authentication {
 
 	user: User;
 
-	/* String Encode to base64url */
+	/** Encode to base64url */
 	credentialID: string;
 
 	credentialPublicKey: Uint8Array;

@@ -1,101 +1,137 @@
-# Org
+# WebAuthn con Angular y NestJS
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Descripción
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+Este repositorio es una guía práctica para implementar **WebAuthn** utilizando **Angular** en el frontend y **NestJS** en el backend. El proyecto incluye un ejemplo de arquitectura que utiliza **Redis** como caché distribuido para mejorar la eficiencia de la autenticación y la gestión de sesiones.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Tabla de Contenidos
 
-## Run tasks
+- [Requisitos](#requisitos)
+- [Arquitectura del Proyecto](#arquitectura-del-proyecto)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Configuración](#configuración)
+- [Desarollo](#desarollo)
 
-To run the dev server for your app, use:
+## Requisitos
 
-```sh
-npx nx serve webauthn-angular
+- Node.js 20+
+- Redis v7.0+
+- Angular CLI v18+
+- NestJS v10+
+- Docker Compose ( Opcional)
+
+## Arquitectura del Proyecto
+
+La arquitectura del proyecto está diseñada para ser modular y escalable, utilizando una separación clara entre frontend, backend y almacenamiento en caché. A continuación se muestra un diagrama simplificado:
+
+![Arquitectura](/docs/images/architecture-diagram.jpg)
+
+### Componentes
+
+- **WebAuthn Client (Angular)**:
+
+  - Ofrece la interfaz gráfica para el registro y autenticación de usuarios mediante WebAuthn.
+  - Facilita la autenticación sin contraseñas, mejorando la experiencia del usuario.
+
+- **WebAuthn API (NestJS)**:
+
+  - Gestiona la lógica de negocio de la autenticación y el registro de dispositivos.
+  - Genera desafíos (challenges) para autenticación y valida las respuestas.
+
+- **Redis Cache**:
+
+  - Almacena temporalmente los desafíos generados durante el proceso de autenticación.
+  - Mejora el tiempo de respuesta al reducir la carga en la base de datos principal.
+
+- **Database (PostgreSQL)**:
+  - Almacena de forma persistente la información de los usuarios y sus dispositivos autenticadores.
+  - Garantiza la integridad y seguridad de los datos registrados.
+
+### Diagrama Base de Datos
+
+![Arquitectura](/docs/images/database-diagram.jpeg)
+
+## Configuración
+
+### Cliente
+
+Configura el endpoint correspondiente en el folder `environments`.
+
+### API
+
+1. Crea un archivo `.env` basado en el template `.env.template` con los siguientes parámetros:
+
+   ```env
+   # PORT
+   PORT=3000
+
+   # JWT
+   JWT_SECRET_TOKEN=NESTJS_SECRET_TOKEN
+   JWT_EXPIRE_TIME=200H
+
+   # WEB AUTHN CONFIG
+   WEB_AUTHN_RP_ID=localhost
+   WEB_AUTHN_RP_NAME=Web Authentication
+   WEB_AUTHN_RP_ID_ARRAY=["localhost", "YOUR_DOMAIN"]
+   WEB_AUTHN_ORIGIN=["http://localhost:3000", "http://localhost:4200"]
+   WEB_AUTHN_NAME=WebAuthn Angular
+
+   # DATABASE CONFIG
+   DATABASE_HOST=localhost
+   DATABASE_PORT=5432
+   DATABASE_NAME=postgres
+   DATABASE_USERNAME=postgres
+   DATABASE_PASSWORD=postgres
+   DATABASE_AUTO_LOAD_ENTITIES=true
+   DATABASE_SYNCHRONIZE=true
+   DATABASE_LOGGING=false
+   DATABASE_SSL=true
+
+   # CACHE CONFIG
+   CACHE_HOST=localhost
+   CACHE_NAME=default
+   CACHE_USERNAME=default
+   CACHE_PASSWORD=default
+   CACHE_PORT=6379
+   CACHE_TTL=60000
+   CACHE_TLS=true
+
+   # WINSTON CONFIG
+   LOGGER_FORMAT=YYYY-MM-DD hh:mm:ss.SSS A
+   LOGGER_APP_NAME=API_WEBAUTHN
+
+   # LOGGER CONFIG
+   LOG_FOLDER=LOG
+   LOGGER_FILENAME_INFO=APP_INFO-%DATE%.json
+   LOGGER_FILENAME_WARN=APP_WARN-%DATE%.json
+   LOGGER_FILENAME_ERROR=APP_ERROR-%DATE%.json
+   LOGGER_DATE_PATTERN=YYYY-MM-DD
+   LOGGER_ZIPPED_ARCHIVE=true
+   LOGGER_WATCH_LOG=true
+   LOGGER_MAX_SIZE=14d
+   LOGGER_MAX_FILES=20m
+   ```
+
+## Desarrollo
+Para ejecutar el proyecto en un entorno local, sigue los siguientes comandos:
+
+### Levantar el Cliente (Angular)
+Inicia el entorno de desarrollo del cliente Angular con el siguiente comando:
+
+```bash
+npm run start:webauthn-angular
 ```
 
-To create a production bundle:
+### Levantar el API (NestJS)
+Inicia el entorno de desarrollo del API NestJS con el siguiente comando:
 
-```sh
-npx nx build webauthn-angular
-```
+```bash
+npm run start:webauthn-nestjs
+ ```
+ 
+### Generar Build
+Para generar la build productiva con el siguiente comando: 
 
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project webauthn-angular
-```
-        
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/angular:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+npm run build
+ ```
