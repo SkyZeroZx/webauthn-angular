@@ -1,0 +1,14 @@
+dist/
+node_modules/
+.angular
+.nx
+.vscode
+.gitignore
+.git/
+.github/
+.scannerwork/
+docs/
+e2e/
+LOG/
+log/
+.gitattributes
