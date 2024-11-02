@@ -22,12 +22,13 @@ describe('webauthn-angular-e2e', () => {
 			}
 		);
 
-		cy.wait(2_000);
+		// eslint-disable-next-line cypress/no-unnecessary-waiting
+		cy.wait(2_000); // take 2 seconds to demostration
 
 		cy.intercept('/api/auth/generate-authentication-options').as('generateAuthenticationOptions');
 
 		cy.intercept('/api/auth/verify-authentication').as('verifyAuthentication');
-		
+
 		cy.logout();
 
 		cy.get('[data-test-id=button-login-webauthn]').click();

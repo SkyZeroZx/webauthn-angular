@@ -25,7 +25,8 @@ Cypress.Commands.add('login', (email, password) => {
 	cy.intercept('/api/auth/login').as('login');
 
 	cy.get('[data-test-id=button-have-account]').click();
-	cy.wait(200);
+	// eslint-disable-next-line cypress/no-unnecessary-waiting
+	cy.wait(200); // Add delay because take some milliseconds render new component
 
 	cy.get('[data-test-id=username]').type(email);
 	cy.get('[data-test-id=password]').type(password);
