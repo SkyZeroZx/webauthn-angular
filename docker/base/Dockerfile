@@ -25,7 +25,3 @@ RUN npm prune --production
 
 # Run node-prune
 RUN /usr/local/bin/node-prune
-
-
-
-

@@ -6,22 +6,44 @@
 	<form [formGroup]="loginForm" class="login__form">
 		<mat-form-field>
 			<mat-label>UserName</mat-label>
-			<input matInput formControlName="username" type="text" placeholder="Username" />
+			<input
+				data-test-id="username"
+				matInput
+				formControlName="username"
+				type="text"
+				placeholder="Username"
+			/>
 		</mat-form-field>
 
 		<mat-form-field>
 			<mat-label>Password</mat-label>
-			<input matInput formControlName="password" type="password" placeholder="Password" />
+			<input
+				data-test-id="password"
+				matInput
+				formControlName="password"
+				type="password"
+				placeholder="Password"
+			/>
 		</mat-form-field>
 	</form>
 </div>
 
 <div mat-dialog-actions class="login__actions">
-	<button mat-flat-button (click)="login()" [disabled]="loginForm.invalid || isLoading()">
+	<button
+		data-test-id="button-login"
+		mat-flat-button
+		(click)="login()"
+		[disabled]="loginForm.invalid || isLoading()"
+	>
 		Log In
 	</button>
 
-	<button mat-mini-fab (click)="loginWithWebAuthn()" [disabled]="!hasUserNameStored">
+	<button
+		data-test-id="button-fingerprint"
+		mat-mini-fab
+		(click)="loginWithWebAuthn()"
+		[disabled]="!hasUserNameStored"
+	>
 		<mat-icon fontIcon="fingerprint" class="icon-lg" />
 	</button>
 </div>

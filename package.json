@@ -10,6 +10,8 @@
     "build:webauthn-nestjs": "nx run webauthn-nestjs:build --configuration=production",
     "build:webauthn-angular": "nx run webauthn-angular:build --configuration=production",
     "lint:affected": "nx affected -t lint",
+    "e2e:webauthn-angular:open": "nx run webauthn-angular-e2e:open-cypress",
+    "e2e:webauthn-angular": "nx run webauthn-angular-e2e:e2e",
     "test:affected": "nx affected -t test",
     "lint": "nx run-many -t lint",
     "lint:fix": "nx run-many -t lint --fix",

@@ -10,8 +10,10 @@ Este repositorio es una guía práctica para implementar **WebAuthn** utilizando
 - [Arquitectura del Proyecto](#arquitectura-del-proyecto)
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Configuración](#configuración)
-- [Desarollo](#desarollo)
+- [Desarollo](#desarollo)-
+  [Pruebas E2E](#pruebas-e2e)
 - [Despliegue](#despliegue)
+
 ## Requisitos
 
 - Node.js 20+
@@ -146,6 +148,24 @@ Ejecutar el siguiente comando para levantar los contenedores de PostgreSQL y Red
 
 ```bash
 docker compose -f "docker-compose.dev.yml" up -d --build
+```
+
+## Pruebas E2E con Cypress
+
+Para ejecutar las pruebas E2E construidas en Cypress, sigue estos pasos:
+
+### 1. Levantar Cypress con la Interfaz Gráfica (UI)
+
+Asegúrate de configurar el archivo `cypress.config.ts` con las variables requeridas. Luego, ejecuta el siguiente comando para abrir Cypress:
+
+```bash
+npm run nx run webauthn-angular-e2e:open-cypress
+```
+
+Para ejecutar las pruebas en modo headless, utiliza el siguiente comando:
+
+```bash
+npm run nx run webauthn-angular-e2e
 ```
 
 ## Despliegue

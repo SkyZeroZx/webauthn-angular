@@ -2,7 +2,12 @@
 	<span class="nav-bar-title">Angular WebAuthn </span>
 	<span class="spacer"></span>
 	@if (user()) {
-		<button mat-icon-button matTooltip="My Account" [matMenuTriggerFor]="userAccountMenu">
+		<button
+			mat-icon-button
+			matTooltip="My Account"
+			[matMenuTriggerFor]="userAccountMenu"
+			data-test-id="button-user-options"
+		>
 			<mat-icon fontIcon="account_circle" class="icon-lg" />
 		</button>
 		<mat-menu #userAccountMenu [overlapTrigger]="false" yPosition="below">
@@ -12,7 +17,7 @@
 
 			<mat-divider />
 
-			<button mat-menu-item (click)="logout()">
+			<button data-test-id="button-logout" mat-menu-item (click)="logout()">
 				<mat-icon fontIcon="exit_to_app" />
 				Log out
 			</button>

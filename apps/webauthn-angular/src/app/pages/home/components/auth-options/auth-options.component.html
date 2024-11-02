@@ -4,12 +4,17 @@
 		ISUVPPA
 	</button>
 
-	<button mat-button (click)="registerWebAuthn()" [disabled]="!user()">
+	<button
+		data-test-id="button-register-webauthn"
+		mat-button
+		(click)="registerWebAuthn()"
+		[disabled]="!user()"
+	>
 		<mat-icon fontIcon="fingerprint" class="icon-lg" />
 		REGISTER AUTHENTICATOR
 	</button>
 
-	<button mat-button (click)="loginWebAuthn()">
+	<button data-test-id="button-login-webauthn" mat-button (click)="loginWebAuthn()">
 		<mat-icon fontIcon="login" class="icon-lg" />
 		AUTHENTICATE
 	</button>
